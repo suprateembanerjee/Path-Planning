@@ -143,7 +143,7 @@ int main() {
             if(d < (4 + 4*(lane - 1)) && d > (4 * (lane - 1)))
             {
               auto s_diff = s - car_s;
-              if ((s_diff > -10) && (s_diff < 20))
+              if ((s_diff > -10) && (s_diff < 30))
               {
                 car_left = true;
               }
@@ -153,7 +153,7 @@ int main() {
             if(d < (4 + 4*(lane + 1)) && d > (4 * (lane + 1)))
             {
               auto s_diff = s - car_s;
-              if ((s_diff > -10) && (s_diff < 20))
+              if ((s_diff > -10) && (s_diff < 30))
               {
                 car_right = true;
               }
