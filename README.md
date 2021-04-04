@@ -106,11 +106,11 @@ There are some things that can be used to make this project much more refined. I
 
 ### Using JMT
 
-I found jerk minimising trajectories to be slightly complicated. However, it might be a better way to compute the best trajectory than splines, subject to experimentation.
+Jerk Minimising Trajectories may or may not be a better way to compute the best trajectory than splines (as used in this project), subject to experimentation.
 
 ### Using a better decision framework
 
-I found the way we select the lane to shift to, very static. Upon finding a vehicle ahead of us, we first check left, and if not possible, then check right. A better approach would be to consider both lanes, left and right, and to select the lane where the next car ahead is farthest, so that we can possibly overtake the car ahead of us. Instead, using this static approach makes our vehicle susceptible to get stuck in local optima.
+This project uses a static lane change decision framework. Upon finding a vehicle ahead of us, we first check left, and if not possible, then check right. A better approach would be to consider both lanes, left and right, and to select the lane where the next car ahead is farthest, so that we can possibly overtake the car ahead of us. Instead, using this static approach makes our vehicle susceptible to get stuck in local optima.
 
 ### Using cost functions
 
