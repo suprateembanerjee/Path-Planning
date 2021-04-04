@@ -93,7 +93,6 @@ the path has processed since last time.
 
 2. There will be some latency between the simulator running and the path planner returning a path, maybe just 1-3 time steps. During this delay the simulator will continue using points that it was last given, because of this its a good idea to store the last points we have used so we can have a smooth transition. previous_path_x, and previous_path_y are helpful for this transition since they show the last points given to the simulator controller with the processed points already removed.
 
-
 ## Editor Settings
 
 It is recommended to use the following settings:
@@ -101,6 +100,21 @@ It is recommended to use the following settings:
 * indent using spaces
 * set tab width to 2 spaces (keeps the matrices in source code aligned)
 
+## Looking forward
+
+There are some things that can be used to make this project much more refined. I list some possible avenues for experimentation below:
+
+### Using JMT
+
+I found jerk minimising trajectories to be slightly complicated. However, it might be a better way to compute the best trajectory than splines, subject to experimentation.
+
+### Using a better decision framework
+
+I found the way we select the lane to shift to, very static. Upon finding a vehicle ahead of us, we first check left, and if not possible, then check right. A better approach would be to consider both lanes, left and right, and to select the lane where the next car ahead is farthest, so that we can possibly overtake the car ahead of us. Instead, using this static approach makes our vehicle susceptible to get stuck in local optima.
+
+### Using cost functions
+
+A better way is to design cost functions in a manner that the decision making is more dynamic. Like the weights in a neural network, the weights for costs, perhaps, can be generated using offline reinforcement learning in a simulated environment such as this. After several iterations, perhaps the car can be made to learn its own costs, which can be used in an online system. Even a more static cost function approach would work better than the current conditional logic approach that has been used.
 
 ## Output
 
