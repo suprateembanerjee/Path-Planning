@@ -1,4 +1,4 @@
-# CarND-Path-Planning-Project
+# Path Planning
 Udacity Self-Driving Car Engineer Nanodegree Program
    
 This project involves using a Simulator developed by Udacity which can be downloaded [here](https://github.com/udacity/self-driving-car-sim/releases/tag/T3_v1.2).
