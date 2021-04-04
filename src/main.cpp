@@ -9,7 +9,6 @@
 #include "json.hpp"
 #include "spline.h"
 
-// for convenience
 using nlohmann::json;
 using std::string;
 using std::vector;
@@ -26,13 +25,16 @@ int main() {
 
   // Waypoint map to read from
   string map_file_ = "../data/highway_map.csv";
+
   // The max s value before wrapping around the track back to 0
   double max_s = 6945.554;
 
   std::ifstream in_map_(map_file_.c_str(), std::ifstream::in);
 
   string line;
-  while (getline(in_map_, line)) {
+
+  while (getline(in_map_, line)) 
+  {
     std::istringstream iss(line);
     double x;
     double y;
@@ -59,20 +61,25 @@ int main() {
   h.onMessage([&map_waypoints_x,&map_waypoints_y,&map_waypoints_s,
                &map_waypoints_dx,&map_waypoints_dy, &ref_vel, &lane, &MAX_ACC, &MAX_SPEED]
               (uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length,
-               uWS::OpCode opCode) {
+               uWS::OpCode opCode) 
+  {
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
     // The 2 signifies a websocket event
-    if (length && length > 2 && data[0] == '4' && data[1] == '2') {
+
+    if (length && length > 2 && data[0] == '4' && data[1] == '2') 
+    {
 
       auto s = hasData(data);
 
-      if (s != "") {
+      if (s != "") 
+      {
         auto j = json::parse(s);
         
         string event = j[0].get<string>();
         
-        if (event == "telemetry") {
+        if (event == "telemetry") 
+        {
           // j[1] is the data JSON object
           
           // Main car's localization Data
@@ -86,12 +93,12 @@ int main() {
           // Previous path data given to the Planner
           auto previous_path_x = j[1]["previous_path_x"];
           auto previous_path_y = j[1]["previous_path_y"];
+
           // Previous path's end s and d values 
           double end_path_s = j[1]["end_path_s"];
           double end_path_d = j[1]["end_path_d"];
 
-          // Sensor Fusion Data, a list of all other cars on the same side 
-          //   of the road.
+          // Sensor Fusion Data, a list of all other cars on the same side of the road.
           auto sensor_fusion = j[1]["sensor_fusion"];
 
           json msgJson;
@@ -99,11 +106,10 @@ int main() {
           int prev_size = previous_path_x.size();
 
           /**
-           * TODO: define a path made up of (x,y) points that the car will visit
-           *   sequentially every .02 seconds
-           */
+            * Define a path made up of (x,y) points that the car will visit
+              sequentially every .02 seconds
+            */
           
-
           if(prev_size > 0)
             car_s = end_path_s;
 
@@ -112,6 +118,7 @@ int main() {
           bool car_right = false;
 
           // Sensor Fusion: Detect position of other vehicles
+
           for(int i = 0; i< sensor_fusion.size(); i++)
           {
             // The car is in my lane
@@ -153,6 +160,7 @@ int main() {
             if(d < (4 + 4*(lane + 1)) && d > (4 * (lane + 1)))
             {
               auto s_diff = s - car_s;
+
               if ((s_diff > -10) && (s_diff < 30))
               {
                 car_right = true;
@@ -170,7 +178,6 @@ int main() {
               lane += 1;
             else
               ref_vel -= MAX_ACC;
-
           }
           else
           {
@@ -183,12 +190,6 @@ int main() {
               ref_vel += MAX_ACC;
           }
           
-
-
-
-
-          
-          
           vector<double> ptsx;
           vector<double> ptsy;
 
@@ -199,7 +200,7 @@ int main() {
           double ref_y = car_y;
           double ref_yaw = deg2rad(car_yaw);
 
-          // if path size is almost empty, use the car as starting reference
+          // If path size is almost empty, use the car as starting reference
           if(prev_size < 2)
           {
           	// Use two points that make the path tangent to the car
@@ -271,7 +272,7 @@ int main() {
           }
 
           // Calculate how to break up the spline points so that we travel at our desired reference velocity
-          double target_x = 30.0;
+          double target_x = 40.0;
           double target_y = s(target_x);
           double target_dist = sqrt(pow(target_x,2) + pow(target_y,2));
           double x_add_on = 0;
@@ -306,7 +307,9 @@ int main() {
 
           ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
         }  // end "telemetry" if
-      } else {
+      } 
+      else 
+      {
         // Manual driving
         std::string msg = "42[\"manual\",{}]";
         ws.send(msg.data(), msg.length(), uWS::OpCode::TEXT);
@@ -314,20 +317,26 @@ int main() {
     }  // end websocket if
   }); // end h.onMessage
 
-  h.onConnection([&h](uWS::WebSocket<uWS::SERVER> ws, uWS::HttpRequest req) {
+  h.onConnection([&h](uWS::WebSocket<uWS::SERVER> ws, uWS::HttpRequest req) 
+  {
     std::cout << "Connected!!!" << std::endl;
   });
 
   h.onDisconnection([&h](uWS::WebSocket<uWS::SERVER> ws, int code,
-                         char *message, size_t length) {
+                         char *message, size_t length) 
+  {
     ws.close();
     std::cout << "Disconnected" << std::endl;
   });
 
   int port = 4567;
-  if (h.listen(port)) {
+  
+  if (h.listen(port)) 
+  {
     std::cout << "Listening to port " << port << std::endl;
-  } else {
+  } 
+  else 
+  {
     std::cerr << "Failed to listen to port" << std::endl;
     return -1;
   }
